@@ -4,7 +4,7 @@ import (
 	"log"
 	"regexp"
 	"strconv"
-	"math/rand"
+//	"math/rand"
 	"hash/fnv"
 	"net/http"
 )
@@ -24,8 +24,10 @@ func hash(s string) uint64 {
 
 func RandStringBytesRmndr(n int) string {
     b := make([]byte, n)
+    var seed uint64 = 0
     for i := range b {
-        b[i] = letterBytes[rand.Int63() % int64(len(letterBytes))]
+	seed = seed*16807+1
+        b[i] = letterBytes[seed % uint64(len(letterBytes))]
     }
     return string(b)
 }
@@ -38,7 +40,6 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		return 
 	}
 	size, err:=strconv.Atoi(m[1])
-//	rand.Seed(int64(hashv))
 	if  err==nil && size>=0 {
 	size64:=uint64(size)
 
